@@ -26,7 +26,7 @@ if df.count() > 0:
     # En çok kayıp olan varlık sıralama yapılarak bulunuyor
 
 
-
+myspark.stop()
 
 
                 

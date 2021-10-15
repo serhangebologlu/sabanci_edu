@@ -47,7 +47,7 @@ df24Hours.select("asset_id", "change_1h", "updated_at_modified", "control_date")
 
 
 
-
+myspark.stop()
 
 
 

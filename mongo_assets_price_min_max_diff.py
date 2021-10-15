@@ -13,17 +13,23 @@ myspark = SparkSession\
     
 df = myspark.read.format("com.mongodb.spark.sql.DefaultSource").load()
 
-df24Hours = df.where(datediff(current_date(), col("updated_at")) < 1)
+if df.count() > 0 :
+    df24Hours = df.where(datediff(current_date(), col("updated_at")) < 1)
+    
+    # AssetId'ye göre gruplama yaparak en yüksek ve en düşük fiyatlar bulunuyor
+    df24Hours = df24Hours.groupBy('asset_id').agg(min('price').alias('min_price'), max('price').alias('max_price'))
+    # AssetId'ye göre gruplama yaparak en yüksek ve en düşük fiyatlar bulunuyor
+    
+    # En yüksek ve en düşük fiyat arasındaki fark ayrı bir kolona yazılıyor
+    df24Hours = df24Hours.withColumn("diff_price", df24Hours.max_price - df24Hours.min_price)
+    # En yüksek ve en düşük fiyat arasındaki fark ayrı bir kolona yazılıyor
+    
+    # Yüksekten düşüğe sıralama yapılıp en büyük fark olan ilk kayıt alınıyor
+    df24Hours.orderBy(desc("diff_price")).select("asset_id", "diff_price").show(1)
+    # Yüksekten düşüğe sıralama yapılıp en büyük fark olan ilk kayıt alınıyor
 
-df24Hours = df24Hours.groupBy('asset_id').agg(min('price').alias('min_price'), max('price').alias('max_price'))
 
-df24Hours = df24Hours.withColumn("diff_price", df24Hours.max_price - df24Hours.min_price)
-
-df24Hours.orderBy(desc("diff_price")).select("asset_id", "diff_price").show(1)
-
-
-
-
+myspark.stop()
 
 
 

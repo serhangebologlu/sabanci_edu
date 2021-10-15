@@ -34,6 +34,6 @@ if df.count() > 0:
     # %10 oranında düşen varlıklar bulunuyor
 
 
-
+myspark.stop()
                 
     

@@ -27,6 +27,9 @@ if df.count() > 0:
     dfHour = df.filter(df.price > amount)
     dfHour.select("asset_id", "change_1h", "change_24h", "price", "updated_at").show()
     # Belirlenen fiyatın üstünde olan varlıklar filtreleniyor
+    
+    
+myspark.stop()
 
 
 
